@@ -58,11 +58,21 @@ function createNewCards(toys)
    btn.id=toys.id;
    btn.innerText="Like <3"
 
+   // how should like button work ?
+// it should be that everytime i am clicking on the like button it is triggering the event listener
+// and what's it's asked to do in the call back function
+// first i need to call fetch on the specific id for all the like buttons and call Patch method on it
+// since i am editing it 
+// then after i get the id, i should add event listener that works on all the buttons that when they are clicked
+// they should increment the likes by getting the inside value of p tag and converting it to an integer
+// after it has been converted it will be incremented.
+// and the value will be passed in the body of the fetch to "likes"
+
    btn.addEventListener("click",(e)=>{
      e.preventDefault();
-    let collectPvalue = e.target.previousElementSibling
-    let likeCount = parseInt(collectPvalue.innerText)+1;
-    collectPvalue.innerHTML=likeCount;
+    let collectPvalue = e.target.previousElementSibling // get the previous elements of btn which is p tag
+    let likeCount = parseInt(collectPvalue.innerText)+1; // converts the value of p tag into integer
+    collectPvalue.innerHTML=likeCount; // after it has fetched it should update the p tag's inner value
     fetch(`http://localhost:3000/toys/${e.target.id}`,{
      method:"PATCH",
      headers:{
@@ -102,15 +112,4 @@ forms.addEventListener("submit",(e)=>{
     .catch((err)=>console.log(err))
     e.target.reset();
 })
-
 });
-// how should like button work ?
-// it should be that everytime i am clicking on the like button it is triggering the event listener
-// and what's it's asked to do in the call back function
-// first i need to call fetch on the specific id for all the like buttons and call Patch method on it
-// since i am editing it 
-// then after i get the id, i should add event listener that works on all the buttons that when they are clicked
-// they should increment the likes by getting the inside value of p tag and converting it to an integer
-// after it has been converted it will be incremented.
-// and the value will be passed in the body of the fetch to "likes"
-
