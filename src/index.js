@@ -1,6 +1,7 @@
 
 let addToy = false;
 document.addEventListener("DOMContentLoaded", () => {
+
   const addBtn = document.querySelector("#new-toy-btn");
   const toyFormContainer = document.querySelector(".container");
   addBtn.addEventListener("click", () => {
@@ -12,12 +13,16 @@ document.addEventListener("DOMContentLoaded", () => {
       toyFormContainer.style.display = "none";
     }
   })
-const toyCollection=document.getElementById("toy-collection");
+
+function fetchCards()
+{
 fetch("http://localhost:3000/toys")
 .then((resp)=>resp.json())
 .then((toys)=>showCards(toys))
 .catch((error)=>console.log(error))
-// this function is going to call createNewCards function to create the divs 
+}
+fetchCards();
+//this function is going to call createNewCards function to create the divs 
 //for all the ones inside the URL database
 //it has the loop that will display all the cards in the API 
 function showCards(toys)
@@ -30,6 +35,8 @@ function showCards(toys)
 // createNewCards function will create structure of a new card so everytime we use 
 // the fetch for POST, and this function will be invoked inside the .then it will create new 
 //structure for new card
+const toyCollection=document.getElementById("toy-collection");
+
 function createNewCards(toys)
 {
   const createDiv=document.createElement("div");
@@ -53,9 +60,9 @@ function createNewCards(toys)
 
    btn.addEventListener("click",(e)=>{
      e.preventDefault();
-    alert("like has been clicked");
     let collectPvalue = e.target.previousElementSibling
     let likeCount = parseInt(collectPvalue.innerText)+1;
+    collectPvalue.innerHTML=likeCount;
     fetch(`http://localhost:3000/toys/${e.target.id}`,{
      method:"PATCH",
      headers:{
@@ -66,19 +73,16 @@ function createNewCards(toys)
        "likes": likeCount
      })
    }).then((resp)=>resp.json())
-   .then((like)=>createNewCards(like))
-  }  )
+  })
   createDiv.append(h2,img,para,btn);
   toyCollection.append(createDiv);
 }
-
 //created these ids in the HTML file, but can be created by JS using set attribute
-
-const toyName=document.getElementById("toy-name");
-const toyUrl=document.getElementById("toy-url");
-
 const forms=document.querySelector(".add-toy-form");  
+
 forms.addEventListener("submit",(e)=>{
+  const toyName=document.getElementById("toy-name");
+  const toyUrl=document.getElementById("toy-url");
   e.preventDefault();
   alert("Create Toy has been clicked")
   fetch("http://localhost:3000/toys",{
@@ -98,6 +102,8 @@ forms.addEventListener("submit",(e)=>{
     .catch((err)=>console.log(err))
     e.target.reset();
 })
+
+});
 // how should like button work ?
 // it should be that everytime i am clicking on the like button it is triggering the event listener
 // and what's it's asked to do in the call back function
@@ -107,4 +113,4 @@ forms.addEventListener("submit",(e)=>{
 // they should increment the likes by getting the inside value of p tag and converting it to an integer
 // after it has been converted it will be incremented.
 // and the value will be passed in the body of the fetch to "likes"
-});
+
